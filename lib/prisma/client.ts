@@ -20,7 +20,19 @@ function getPrisma() {
     })
   }
 
+  // Use POSTGRES_PRISMA_URL or POSTGRES_URL if DATABASE_URL is not available (for Vercel)
+  const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL
+  
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL, POSTGRES_PRISMA_URL, or POSTGRES_URL environment variable is required')
+  }
+
   const client = new PrismaClient({
+    datasources: {
+      db: {
+        url: databaseUrl,
+      },
+    },
     log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
   })
 

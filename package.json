@@ -15,14 +15,13 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
-    "@prisma/client": "^5.9.1",
+    "@prisma/client": "^7.0.0",
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "^2.39.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
     "lucide-react": "^0.309.0",
     "next": "^16.0.0",
-    "prisma": "^5.9.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.49.3",
@@ -40,6 +39,7 @@
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.0.0",
     "postcss": "^8.4.33",
+    "prisma": "^7.0.0",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.20.6",
     "typescript": "^5.3.3"
