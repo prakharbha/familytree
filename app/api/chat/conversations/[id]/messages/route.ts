@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/auth/middleware'
 import { prisma } from '@/lib/prisma/client'
 
+// Prevent static generation during build
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
