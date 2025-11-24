@@ -38,3 +38,8 @@ next-env.d.ts
 # prisma
 /prisma/migrations
 
+# HTML exports and associated files
+*.html
+*_files/
+gradient-bg.*.webp
+

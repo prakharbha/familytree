@@ -15,24 +15,17 @@ export async function GET(request: NextRequest) {
     }
 
     if (email) {
-      // Search for user by email in User table (assuming email is stored)
-      // Note: In production, you'd want to use Supabase admin API or a different approach
-      // For now, we'll search profiles that might have email in tags or other fields
-      // This is a simplified version - in production, link User.email to Profile
-      const profile = await prisma.profile.findFirst({
-        where: {
-          OR: [
-            { tags: { has: email } },
-            // Add other search criteria as needed
-          ],
-        },
+      // Search for user by email - find User by email, then get their Profile
+      const user = await prisma.user.findUnique({
+        where: { email },
+        include: { profile: true },
       })
 
-      if (!profile) {
+      if (!user || !user.profile) {
         return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
       }
 
-      return NextResponse.json(profile)
+      return NextResponse.json(user.profile)
     }
 
     // Search by name

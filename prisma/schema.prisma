@@ -63,9 +63,10 @@ model Profile {
   tags        String[] @default([])
   location    String?
   profession  String?
-  values      String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  values         String[]
+  reactFlowState Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Relations
   timelineEntries        TimelineEntry[]
