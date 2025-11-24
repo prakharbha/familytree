@@ -1,0 +1,238 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  VIEWER
+  CONTRIBUTOR
+  LEGACY_KEEPER
+}
+
+enum RelationshipType {
+  PARENT
+  CHILD
+  SIBLING
+  SPOUSE
+  GRANDPARENT
+  GRANDCHILD
+  AUNT_UNCLE
+  NIECE_NEPHEW
+  COUSIN
+}
+
+enum ConnectionRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NotificationType {
+  TIMELINE_ENTRY
+  FEED_POST
+  FAMILY_UPDATE
+  CONNECTION_REQUEST
+  CHAT_MESSAGE
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  profile   Profile?
+
+  @@map("users")
+}
+
+model Profile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photo       String?
+  name        String
+  dateOfBirth DateTime?
+  highlights  String?
+  tags        String[] @default([])
+  location    String?
+  profession  String?
+  values      String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  timelineEntries        TimelineEntry[]
+  mediaItems             MediaItem[]
+  feedPosts              FeedPost[]
+  familyRelations        FamilyMember[] @relation("FamilyRelations")
+  relatedFamilyMembers   FamilyMember[]
+  sentConnectionRequests FamilyConnectionRequest[] @relation("SenderRequests")
+  receivedConnectionRequests FamilyConnectionRequest[] @relation("ReceiverRequests")
+  chatConversationsAsUser1 ChatConversation[] @relation("User1")
+  chatConversationsAsUser2 ChatConversation[] @relation("User2")
+  sentMessages           ChatMessage[] @relation("Sender")
+  notifications          Notification[]
+
+  @@map("profiles")
+}
+
+model FamilyConnectionRequest {
+  id             String                 @id @default(uuid())
+  senderId       String
+  sender         Profile                @relation("SenderRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId     String
+  receiver       Profile                @relation("ReceiverRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+  relationshipType RelationshipType
+  status         ConnectionRequestStatus @default(PENDING)
+  message        String?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  @@unique([senderId, receiverId, relationshipType])
+  @@map("family_connection_requests")
+}
+
+model FamilyMember {
+  id               String           @id @default(uuid())
+  profileId        String
+  profile          Profile          @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  relatedProfileId String
+  relatedProfile   Profile          @relation("FamilyRelations", fields: [relatedProfileId], references: [id], onDelete: Cascade)
+  relationshipType RelationshipType
+  role             UserRole         @default(VIEWER)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@unique([profileId, relatedProfileId, relationshipType])
+  @@map("family_members")
+}
+
+model TimelineEntry {
+  id          String   @id @default(uuid())
+  profileId   String
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  date        DateTime
+  type        String?
+  mediaUrls   String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("timeline_entries")
+}
+
+model FeedPost {
+  id          String   @id @default(uuid())
+  profileId   String
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  content     String
+  mediaUrls   String[] @default([])
+  tags        String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  comments    FeedComment[]
+  reactions   FeedReaction[]
+
+  @@map("feed_posts")
+}
+
+model FeedComment {
+  id        String   @id @default(uuid())
+  postId    String
+  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  profileId String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("feed_comments")
+}
+
+model FeedReaction {
+  id        String   @id @default(uuid())
+  postId    String
+  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  profileId String
+  type      String   // like, love, etc.
+  createdAt DateTime @default(now())
+
+  @@unique([postId, profileId])
+  @@map("feed_reactions")
+}
+
+model MediaItem {
+  id          String   @id @default(uuid())
+  profileId   String
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  url         String
+  type        String   // photo, video, audio, document
+  title       String?
+  description String?
+  tags        String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("media_items")
+}
+
+model ChatConversation {
+  id        String   @id @default(uuid())
+  user1Id   String
+  user1     Profile  @relation("User1", fields: [user1Id], references: [id], onDelete: Cascade)
+  user2Id   String
+  user2     Profile  @relation("User2", fields: [user2Id], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages  ChatMessage[]
+
+  @@unique([user1Id, user2Id])
+  @@map("chat_conversations")
+}
+
+model ChatMessage {
+  id             String           @id @default(uuid())
+  conversationId String
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         Profile          @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+  content        String
+  read           Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+
+  @@map("chat_messages")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  profileId String
+  profile   Profile          @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  message   String
+  read      Boolean          @default(false)
+  link      String?
+  createdAt DateTime         @default(now())
+
+  @@map("notifications")
+}
+
+model StoryPrompt {
+  id       String   @id @default(uuid())
+  question String
+  category String?
+  active   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("story_prompts")
+}
+
