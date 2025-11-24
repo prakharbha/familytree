@@ -867,7 +867,7 @@ function FamilyTreeContent() {
           >
             <Controls />
             <Background 
-              variant="dots" 
+              variant={"dots" as any}
               gap={20} 
               size={1.5}
               color="#d1d5db"
