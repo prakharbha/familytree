@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,6 +8,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 enum UserRole {
   VIEWER
   CONTRIBUTOR
@@ -34,11 +34,34 @@ enum ConnectionRequestStatus {
 }
 
 enum NotificationType {
-  TIMELINE_ENTRY
-  FEED_POST
+  MEMORY_CAPSULE
+  WALL_ITEM
   FAMILY_UPDATE
   CONNECTION_REQUEST
   CHAT_MESSAGE
+}
+
+enum PersonaType {
+  PERSONAL
+  PROFESSIONAL
+  SOCIAL
+  GENERATIONAL
+  SPIRITUAL
+  CULTURAL
+}
+
+enum Visibility {
+  PRIVATE
+  FAMILY
+  CONTRIBUTORS
+  PUBLIC
+}
+
+enum MediaType {
+  PHOTO
+  VIDEO
+  AUDIO
+  DOCUMENT
 }
 
 model User {
@@ -56,20 +79,24 @@ model Profile {
   userId      String   @unique
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   photo       String?
+  coverPhoto  String?
   name        String
   dateOfBirth DateTime?
-  highlights  String?
-  tags        String[] @default([])
+  bio         String?
   location    String?
   profession  String?
-  values         String[]
-  reactFlowState Json?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  
+  // The Six Personas
+  personas    Persona[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
-  timelineEntries        TimelineEntry[]
-  mediaItems             MediaItem[]
+  memoryCapsules         MemoryCapsule[]
+  legacyWallItems        LegacyWallItem[]
+  legacyVaultItems       LegacyVaultItem[]
+  traditions             Tradition[]
   feedPosts              FeedPost[]
   familyRelations        FamilyMember[] @relation("FamilyRelations")
   relatedFamilyMembers   FamilyMember[]
@@ -78,9 +105,28 @@ model Profile {
   chatConversationsAsUser1 ChatConversation[] @relation("User1")
   chatConversationsAsUser2 ChatConversation[] @relation("User2")
   sentMessages           ChatMessage[] @relation("Sender")
+
   notifications          Notification[]
+  feedComments           FeedComment[]
+  mediaItems             MediaItem[]
+  receivedVaultItems     LegacyVaultItem[] @relation("DesignatedViewer")
 
   @@map("profiles")
+}
+
+model Persona {
+  id          String      @id @default(uuid())
+  profileId   String
+  profile     Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  type        PersonaType
+  description String?
+  highlights  String[]    @default([])
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@unique([profileId, type])
+  @@map("personas")
 }
 
 model FamilyConnectionRequest {
@@ -114,19 +160,92 @@ model FamilyMember {
   @@map("family_members")
 }
 
-model TimelineEntry {
+model MemoryCapsule {
   id          String   @id @default(uuid())
   profileId   String
   profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   title       String
-  description String?
-  date        DateTime
-  type        String?
-  mediaUrls   String[] @default([])
+  description String?  // Story
+  date        DateTime? // Can be just a year, so maybe handle loosely or specific date
+  
+  personaTags PersonaType[]
+  emotionalTags String[] @default([])
+  lesson      String?
+  
+  visibility  Visibility @default(FAMILY)
+  
+  mediaItems  MediaItem[]
+  
+  comments    FeedComment[]
+  reactions   FeedReaction[]
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@map("timeline_entries")
+  @@map("memory_capsules")
+}
+
+model LegacyWallItem {
+  id          String   @id @default(uuid())
+  profileId   String
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title       String
+  category    PersonaType
+  description String?
+  lesson      String?
+  
+  mediaItems  MediaItem[]
+  
+  visibility  Visibility @default(FAMILY)
+  
+  comments    FeedComment[]
+  reactions   FeedReaction[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("legacy_wall_items")
+}
+
+model LegacyVaultItem {
+  id          String   @id @default(uuid())
+  profileId   String
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title       String
+  type        String   // letter, key, instruction, document
+  description String?
+  fileUrl     String?
+  
+  accessRules String?  // JSON or string description of who can access
+  isLocked    Boolean  @default(true)
+  
+  unlockAt           DateTime?
+  designatedViewerId String?
+  designatedViewer   Profile?  @relation("DesignatedViewer", fields: [designatedViewerId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("legacy_vault_items")
+}
+
+model Tradition {
+  id          String   @id @default(uuid())
+  profileId   String
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name        String
+  origin      String?
+  description String?
+  
+  mediaItems  MediaItem[]
+  
+  comments    FeedComment[]
+  reactions   FeedReaction[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("traditions")
 }
 
 model FeedPost {
@@ -147,9 +266,22 @@ model FeedPost {
 
 model FeedComment {
   id        String   @id @default(uuid())
-  postId    String
-  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  // Polymorphic Relations (Only one should be set)
+  postId    String?
+  post      FeedPost? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  memoryCapsuleId String?
+  memoryCapsule   MemoryCapsule? @relation(fields: [memoryCapsuleId], references: [id], onDelete: Cascade)
+  
+  legacyWallItemId String?
+  legacyWallItem   LegacyWallItem? @relation(fields: [legacyWallItemId], references: [id], onDelete: Cascade)
+  
+  traditionId     String?
+  tradition       Tradition? @relation(fields: [traditionId], references: [id], onDelete: Cascade)
+
   profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -159,13 +291,30 @@ model FeedComment {
 
 model FeedReaction {
   id        String   @id @default(uuid())
-  postId    String
-  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  // Polymorphic Relations
+  postId    String?
+  post      FeedPost? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  memoryCapsuleId String?
+  memoryCapsule   MemoryCapsule? @relation(fields: [memoryCapsuleId], references: [id], onDelete: Cascade)
+  
+  legacyWallItemId String?
+  legacyWallItem   LegacyWallItem? @relation(fields: [legacyWallItemId], references: [id], onDelete: Cascade)
+  
+  traditionId     String?
+  tradition       Tradition? @relation(fields: [traditionId], references: [id], onDelete: Cascade)
+
   profileId String
   type      String   // like, love, etc.
   createdAt DateTime @default(now())
 
+  // Ensure unique reaction per user per item
   @@unique([postId, profileId])
+  @@unique([memoryCapsuleId, profileId])
+  @@unique([legacyWallItemId, profileId])
+  @@unique([traditionId, profileId])
+  
   @@map("feed_reactions")
 }
 
@@ -174,10 +323,21 @@ model MediaItem {
   profileId   String
   profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   url         String
-  type        String   // photo, video, audio, document
+  type        MediaType
   title       String?
   description String?
   tags        String[] @default([])
+  
+  // Relations to other items (Optional, as media can belong to creating things)
+  memoryCapsuleId String?
+  memoryCapsule   MemoryCapsule? @relation(fields: [memoryCapsuleId], references: [id])
+  
+  legacyWallItemId String?
+  legacyWallItem   LegacyWallItem? @relation(fields: [legacyWallItemId], references: [id])
+  
+  traditionId     String?
+  tradition       Tradition? @relation(fields: [traditionId], references: [id])
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -235,4 +395,3 @@ model StoryPrompt {
 
   @@map("story_prompts")
 }
-

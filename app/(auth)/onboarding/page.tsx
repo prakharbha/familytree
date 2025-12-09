@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { PersonaSelector, PersonaData } from '@/components/onboarding/persona-selector'
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(1)
@@ -20,8 +21,7 @@ export default function OnboardingPage() {
     setStep(2)
   }
 
-  const handleStep2Submit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handlePersonaComplete = async (personas: PersonaData[]) => {
     setLoading(true)
 
     const { data: { user } } = await supabase.auth.getUser()
@@ -30,19 +30,21 @@ export default function OnboardingPage() {
       return
     }
 
-    // Create profile
+    // Create profile with personas
     const response = await fetch('/api/profiles', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name,
         dateOfBirth: dateOfBirth || null,
+        personas,
       }),
     })
 
     if (response.ok) {
       router.push('/dashboard')
     } else {
+      console.error('Failed to create profile')
       setLoading(false)
     }
   }
@@ -94,31 +96,16 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4 animate-fade-in">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-white px-4 animate-fade-in py-8">
+      <Card className="w-full max-w-2xl shadow-lg">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl text-center">Start Your Legacy Journey</CardTitle>
+          <CardTitle className="text-3xl text-center">Define Your Identity</CardTitle>
           <CardDescription className="text-center">
-            You're all set! Let's begin preserving your family story.
+            You are more than just one thing. Let's explore your different sides.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleStep2Submit} className="space-y-4">
-            <p className="text-sm text-gray-600 text-center">
-              You can invite family members later, or start building your profile now.
-            </p>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Setting up...' : 'Get Started'}
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              className="w-full"
-              onClick={() => setStep(1)}
-            >
-              Back
-            </Button>
-          </form>
+          <PersonaSelector onComplete={handlePersonaComplete} loading={loading} />
         </CardContent>
       </Card>
     </div>

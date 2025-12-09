@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 import { resolve } from 'path'
 import { createClient } from '@supabase/supabase-js'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, PersonaType, Visibility } from '@prisma/client'
 
 // Load environment variables from .env.local
 config({ path: resolve(__dirname, '../.env.local') })
@@ -31,8 +31,10 @@ const testUsers = [
     dateOfBirth: '1980-05-15',
     location: 'New York, USA',
     profession: 'Software Engineer',
-    values: ['Family', 'Integrity', 'Hard Work'],
-    tags: ['Tech', 'Travel', 'Photography'],
+    personas: [
+      { type: 'PROFESSIONAL' as PersonaType, description: 'Passionate about building scalable systems.', highlights: ['Senior Engineer', 'Tech Lead'] },
+      { type: 'PERSONAL' as PersonaType, description: 'Love hiking and photography.', highlights: ['Hiker', 'Photographer'] },
+    ]
   },
   {
     email: 'sarah@familytest.com',
@@ -41,8 +43,10 @@ const testUsers = [
     dateOfBirth: '1982-08-20',
     location: 'New York, USA',
     profession: 'Teacher',
-    values: ['Education', 'Family', 'Kindness'],
-    tags: ['Education', 'Reading', 'Cooking'],
+    personas: [
+      { type: 'PROFESSIONAL' as PersonaType, description: 'Dedicated to early childhood education.', highlights: ['Teacher of the Year'] },
+      { type: 'SOCIAL' as PersonaType, description: 'Active in local community center.', highlights: ['Volunteer'] },
+    ]
   },
   {
     email: 'michael@familytest.com',
@@ -51,8 +55,9 @@ const testUsers = [
     dateOfBirth: '1975-03-10',
     location: 'Los Angeles, USA',
     profession: 'Doctor',
-    values: ['Health', 'Service', 'Family'],
-    tags: ['Medicine', 'Sports', 'Music'],
+    personas: [
+      { type: 'PROFESSIONAL' as PersonaType, description: 'Cardiologist helping hearts beat stronger.', highlights: ['MD', 'Surgeon'] },
+    ]
   },
   {
     email: 'emily@familytest.com',
@@ -61,8 +66,9 @@ const testUsers = [
     dateOfBirth: '1978-11-25',
     location: 'Los Angeles, USA',
     profession: 'Designer',
-    values: ['Creativity', 'Beauty', 'Family'],
-    tags: ['Design', 'Art', 'Fashion'],
+    personas: [
+      { type: 'PROFESSIONAL' as PersonaType, description: 'Creating beautiful spaces.', highlights: ['Interior Design'] },
+    ]
   },
 ]
 
@@ -74,7 +80,7 @@ async function createTestUsers() {
   for (const userData of testUsers) {
     try {
       let authData: any = null
-      
+
       // Try to get existing user first
       const { data: existingUsers } = await supabase.auth.admin.listUsers()
       const existingUser = existingUsers?.users.find(u => u.email === userData.email)
@@ -124,9 +130,7 @@ async function createTestUsers() {
             dateOfBirth: new Date(userData.dateOfBirth),
             location: userData.location,
             profession: userData.profession,
-            values: userData.values,
-            tags: userData.tags,
-            highlights: `This is a test profile for ${userData.name}. Created for testing purposes.`,
+            bio: `This is a test profile for ${userData.name}. Created for testing purposes.`,
           },
         })
         console.log(`✅ Updated profile for: ${userData.name}`)
@@ -139,12 +143,35 @@ async function createTestUsers() {
             dateOfBirth: new Date(userData.dateOfBirth),
             location: userData.location,
             profession: userData.profession,
-            values: userData.values,
-            tags: userData.tags,
-            highlights: `This is a test profile for ${userData.name}. Created for testing purposes.`,
+            bio: `This is a test profile for ${userData.name}. Created for testing purposes.`,
           },
         })
         console.log(`✅ Created profile for: ${userData.name}`)
+      }
+
+      // Create/Update Personas
+      if (userData.personas) {
+        for (const p of userData.personas) {
+          await prisma.persona.upsert({
+            where: {
+              profileId_type: {
+                profileId: profile.id,
+                type: p.type
+              }
+            },
+            update: {
+              description: p.description,
+              highlights: p.highlights
+            },
+            create: {
+              profileId: profile.id,
+              type: p.type,
+              description: p.description,
+              highlights: p.highlights
+            }
+          })
+        }
+        console.log(`   - Added personas for ${userData.name}`)
       }
 
       createdProfiles.push(profile)
@@ -157,81 +184,105 @@ async function createTestUsers() {
   // Create family relationships
   if (createdProfiles.length >= 2) {
     console.log('🔗 Creating family relationships...\n')
-    
+
     // John and Sarah are spouses
     if (createdProfiles[0] && createdProfiles[1]) {
-      await prisma.familyMember.createMany({
-        data: [
-          {
-            profileId: createdProfiles[0].id,
-            relatedProfileId: createdProfiles[1].id,
-            relationshipType: 'SPOUSE',
-            role: 'CONTRIBUTOR',
-          },
-          {
-            profileId: createdProfiles[1].id,
-            relatedProfileId: createdProfiles[0].id,
-            relationshipType: 'SPOUSE',
-            role: 'CONTRIBUTOR',
-          },
-        ],
+      // Check if already connected
+      const existing = await prisma.familyMember.findFirst({
+        where: {
+          profileId: createdProfiles[0].id,
+          relatedProfileId: createdProfiles[1].id,
+          relationshipType: 'SPOUSE'
+        }
       })
-      console.log(`✅ Connected ${createdProfiles[0].name} and ${createdProfiles[1].name} as spouses`)
+
+      if (!existing) {
+        await prisma.familyMember.createMany({
+          data: [
+            {
+              profileId: createdProfiles[0].id,
+              relatedProfileId: createdProfiles[1].id,
+              relationshipType: 'SPOUSE',
+              role: 'CONTRIBUTOR',
+            },
+            {
+              profileId: createdProfiles[1].id,
+              relatedProfileId: createdProfiles[0].id,
+              relationshipType: 'SPOUSE',
+              role: 'CONTRIBUTOR',
+            },
+          ],
+        })
+        console.log(`✅ Connected ${createdProfiles[0].name} and ${createdProfiles[1].name} as spouses`)
+      }
     }
 
     // Michael and Emily are spouses
     if (createdProfiles[2] && createdProfiles[3]) {
-      await prisma.familyMember.createMany({
-        data: [
-          {
-            profileId: createdProfiles[2].id,
-            relatedProfileId: createdProfiles[3].id,
-            relationshipType: 'SPOUSE',
-            role: 'CONTRIBUTOR',
-          },
-          {
-            profileId: createdProfiles[3].id,
-            relatedProfileId: createdProfiles[2].id,
-            relationshipType: 'SPOUSE',
-            role: 'CONTRIBUTOR',
-          },
-        ],
+      const existing = await prisma.familyMember.findFirst({
+        where: {
+          profileId: createdProfiles[2].id,
+          relatedProfileId: createdProfiles[3].id,
+          relationshipType: 'SPOUSE'
+        }
       })
-      console.log(`✅ Connected ${createdProfiles[2].name} and ${createdProfiles[3].name} as spouses`)
+
+      if (!existing) {
+        await prisma.familyMember.createMany({
+          data: [
+            {
+              profileId: createdProfiles[2].id,
+              relatedProfileId: createdProfiles[3].id,
+              relationshipType: 'SPOUSE',
+              role: 'CONTRIBUTOR',
+            },
+            {
+              profileId: createdProfiles[3].id,
+              relatedProfileId: createdProfiles[2].id,
+              relationshipType: 'SPOUSE',
+              role: 'CONTRIBUTOR',
+            },
+          ],
+        })
+        console.log(`✅ Connected ${createdProfiles[2].name} and ${createdProfiles[3].name} as spouses`)
+      }
     }
   }
 
-  // Create some timeline entries
+  // Create some memory capsules
   if (createdProfiles.length > 0) {
-    console.log('\n📅 Creating sample timeline entries...\n')
-    
-    const timelineEntries = [
+    console.log('\n📅 Creating sample memory capsules...\n')
+
+    const capsules = [
       {
         profileId: createdProfiles[0].id,
         title: 'Started New Job',
         description: 'Joined a new company as a Senior Software Engineer',
         date: new Date('2023-01-15'),
-        type: 'Career',
+        personaTags: ['PROFESSIONAL' as PersonaType],
+        visibility: 'FAMILY' as Visibility
       },
       {
         profileId: createdProfiles[0].id,
         title: 'Family Vacation',
         description: 'Amazing trip to Hawaii with the whole family',
         date: new Date('2023-07-20'),
-        type: 'Family',
+        personaTags: ['PERSONAL' as PersonaType],
+        visibility: 'FAMILY' as Visibility
       },
       {
         profileId: createdProfiles[1].id,
         title: 'Published First Book',
         description: 'My first children\'s book was published!',
         date: new Date('2023-03-10'),
-        type: 'Achievement',
+        personaTags: ['PROFESSIONAL' as PersonaType],
+        visibility: 'PUBLIC' as Visibility
       },
     ]
 
-    for (const entry of timelineEntries) {
-      await prisma.timelineEntry.create({ data: entry })
-      console.log(`✅ Created timeline entry: ${entry.title}`)
+    for (const entry of capsules) {
+      await prisma.memoryCapsule.create({ data: entry })
+      console.log(`✅ Created memory capsule: ${entry.title}`)
     }
   }
 
@@ -247,8 +298,12 @@ async function createTestUsers() {
   ]
 
   for (const prompt of prompts) {
-    await prisma.storyPrompt.create({ data: prompt })
-    console.log(`✅ Created prompt: ${prompt.question}`)
+    // Check if exists
+    const existing = await prisma.storyPrompt.findFirst({ where: { question: prompt.question } })
+    if (!existing) {
+      await prisma.storyPrompt.create({ data: prompt })
+      console.log(`✅ Created prompt: ${prompt.question}`)
+    }
   }
 
   console.log('\n✨ Seeding complete!\n')

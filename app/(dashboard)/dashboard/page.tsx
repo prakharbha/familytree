@@ -26,7 +26,7 @@ export default async function DashboardPage() {
     include: { relatedProfile: true },
   })
 
-  const recentTimelineEntries = await prisma.timelineEntry.findMany({
+  const recentMemoryCapsules = await prisma.memoryCapsule.findMany({
     where: { profileId: profile.id },
     orderBy: { date: 'desc' },
     take: 5,
@@ -55,13 +55,13 @@ export default async function DashboardPage() {
 
         <Card className="hover:shadow-lg transition-shadow duration-200">
           <CardHeader>
-            <CardTitle>Timeline Entries</CardTitle>
+            <CardTitle>Memory Capsules</CardTitle>
             <CardDescription>Your legacy timeline</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold mb-2">{recentTimelineEntries.length}</div>
-            <Link href="/timeline">
-              <Button variant="outline" size="sm">View Timeline</Button>
+            <div className="text-3xl font-bold mb-2">{recentMemoryCapsules.length}</div>
+            <Link href="/memory-capsule">
+              <Button variant="outline" size="sm">View Memories</Button>
             </Link>
           </CardContent>
         </Card>
@@ -75,22 +75,22 @@ export default async function DashboardPage() {
             <Link href="/profile">
               <Button variant="outline" size="sm" className="w-full">Edit Profile</Button>
             </Link>
-            <Link href="/timeline">
-              <Button variant="outline" size="sm" className="w-full">Add Timeline Entry</Button>
+            <Link href="/memory-capsule">
+              <Button variant="outline" size="sm" className="w-full">Add Memory Capsule</Button>
             </Link>
           </CardContent>
         </Card>
       </div>
 
-      {recentTimelineEntries.length > 0 && (
+      {recentMemoryCapsules.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Recent Timeline Entries</CardTitle>
+            <CardTitle>Recent Memory Capsules</CardTitle>
             <CardDescription>Your latest legacy moments</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentTimelineEntries.map((entry: any) => (
+              {recentMemoryCapsules.map((entry: any) => (
                 <div key={entry.id} className="border-b border-gray-100 pb-4 last:border-0">
                   <h3 className="font-semibold mb-1">{entry.title}</h3>
                   {entry.description && (

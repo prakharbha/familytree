@@ -43,3 +43,6 @@ next-env.d.ts
 *_files/
 gradient-bg.*.webp
 
+
+# Backup
+family_tree_backup.zip

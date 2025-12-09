@@ -8,13 +8,13 @@ export default async function Home() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (user) {
-    redirect('/dashboard')
+    redirect('/feed')
   }
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Elegant Blurred Gradient Background - Inspired by soft floral gradients */}
-      <div 
+      <div
         className="absolute inset-0"
         style={{
           background: `
@@ -30,12 +30,12 @@ export default async function Home() {
           transform: 'scale(1.4)',
         }}
       ></div>
-      
+
       {/* Soft overlay for seamless blending */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-white/30"></div>
-      
+
       {/* Very subtle texture overlay */}
-      <div 
+      <div
         className="absolute inset-0 opacity-[0.015]"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='texture' x='0' y='0' width='300' height='300' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='150' cy='150' r='80' fill='%23000000' opacity='0.03'/%3E%3Ccircle cx='100' cy='100' r='50' fill='%23000000' opacity='0.02'/%3E%3Ccircle cx='200' cy='200' r='60' fill='%23000000' opacity='0.025'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='300' height='300' fill='url(%23texture)'/%3E%3C/svg%3E")`,
@@ -43,15 +43,15 @@ export default async function Home() {
           filter: 'blur(4px)',
         }}
       ></div>
-      
+
       {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Link href="/" className="flex items-center gap-2">
           <h1 className="text-2xl font-mix font-semibold text-black">Family Legacy</h1>
         </Link>
         <div className="flex items-center gap-6">
-          <Link 
-            href="/login" 
+          <Link
+            href="/login"
             className="text-gray-700 hover:text-black transition-colors font-medium"
           >
             Sign In
@@ -69,9 +69,9 @@ export default async function Home() {
             <span className="block">Preserve Your</span>
             <span className="block">Family Legacy</span>
           </h2>
-          
+
           <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed font-sans">
-            Capture the stories, memories, and connections that define your family. 
+            Capture the stories, memories, and connections that define your family.
             Build a living timeline that future generations will treasure.
           </p>
 

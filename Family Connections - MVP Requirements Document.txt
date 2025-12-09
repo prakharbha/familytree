@@ -1,0 +1,794 @@
+1. Introduction and Project Overview
+
+1.1 Purpose of This Document
+This MVP Requirements Document defines the scope, functionality, user experience expectations, and foundational principles for the first build of the platform (project name TBD). The purpose is to provide developers and designers with a clear, unambiguous, detailed guide to build the initial version of the product without guesswork or missing context.
+This document outlines what needs to be built, how it should function, and the experience it must deliver to reflect the core vision of the platform.
+The MVP is not aiming to capture every feature of the long-term vision. Instead, it must successfully demonstrate three core truths:
+This is not social media.
+It is reflective, intimate, and private.
+This is not genealogy software.
+It is about human stories, emotions, and identity — not just names and dates.
+This is not cloud storage.
+It is structured, contextual, and deeply meaningful, not a dump of files.
+
+1.2 Product Vision (High-Level)
+The platform is designed to help individuals and families connect more deeply, understand one another more fully, and preserve meaningful stories, memories, values, and cultural heritage across generations.
+Unlike social media or genealogy tools, this platform focuses on: - Emotional depth (why moments matter) - Family connection (strengthening bonds) - Identity understanding (multi-dimensional personas) - Generational continuity (preserving culture + lineage)
+The goal is to create a private, reflective digital space where each person’s story is honored as part of a larger family tapestry.
+
+1.3 Problem Statement
+Modern families are increasingly disconnected despite digital connectivity. Lives are documented through social feeds and fragmented platforms, but: 
+Meaning is lost in the noise. 
+Stories aren’t preserved. 
+Cultural roots fade. 
+Younger generations don’t understand the lives, struggles, and values of their parents or grandparents. 
+Older generations lack a simple way to pass down wisdom or secure important information.
+The platform solves these gaps by creating a centralized, private, emotionally rich family ecosystem.
+
+
+1.4 MVP Objective
+The MVP aims to establish the core foundation of this ecosystem by enabling users to capture meaningful memories and build a living timeline. It provides an avenue to Celebrate key milestones, Preserve private items securely and Map family relationships. For next generation, the solution allows understanding of one's identity through personas and culture, and build deeper intergenerational relatability 
+The MVP positions the product as a “Legacy Over Lifetime” platform — a new category that bridges the gap between:
+Memory keeping
+Family storytelling
+Identity reflection
+Generational continuity
+Digital inheritance
+It provides the user with a sense of continuity, connection, and emotional resonance from Day 
+The MVP is not meant to include advanced automation or AI generation—only a clear, guided, structured experience using predefined prompts and standard programming logic.
+
+
+
+
+1.5 Product Themes (What the MVP Must Demonstrate)
+The MVP must successfully demonstrate the following themes:
+1. Connection
+Bring families closer by enabling shared memories, reflections, and insights.
+2. Continuity
+Preserve cultural roots, traditions, values, and life lessons.
+3. Identity
+Show each user as a whole person across multiple dimensions.
+4. Meaning
+Focus on reflection, lessons, and emotional significance—not social performance.
+5. Privacy
+Private by default. Family-first access controls.
+
+What the MVP Must Communicate Immediately
+       Within the first 5 minutes of use, the user should feel:
+“This is a place to preserve who I am, not just what I’ve done.”
+“This feels private, safe, and personal — not performative.”
+“This helps me think, remember, and reflect — not just share.”
+“I can build something meaningful for my family.”
+“AI here isn’t gimmicky — it understands me and helps me articulate my story.”
+
+
+1.5 Core Differentiators
+
+This section identifies the unique value drivers that set this platform apart from every adjacency: social media, genealogy platforms, photo storage, journaling tools, and digital inheritance services.
+These differentiators must be visible in the MVP, not just the long-term roadmap.
+
+1. Legacy Over a Lifetime (Category Breaker)
+Instead of a static record of the past or a feed of the moment, the platform introduces a new category:
+A living, evolving legacy that grows with you.
+Traditional genealogy tells where you came from. Social media shows what you’re doing now. Legacy platforms (wills, vaults, etc.) only matter when you're gone.
+This bridges all three.
+It creates a complete, emotional, identity-rich picture of a person as they live, grow, reflect, and evolve.
+This concept powers everything else on the platform.
+
+2. The Human Story Layer (Not Just Data)
+Most platforms capture information — but not meaning.
+Here, every memory, milestone, or achievement includes:
+why it mattered
+what it taught
+who it affected
+how it felt
+what future generations should understand about it
+This transforms content into legacy.
+Meaning > Moments Reflection > Posting Story > Status
+This philosophical shift is a core differentiator of your platform.
+3. Multi-Dimensional Identity (The Six Personas)
+Users are not a single face or role — they are six overlapping identities:
+Personal
+Professional
+Social
+Generational
+Spiritual
+Cultural
+No existing product organizes a person’s life this holistically.
+This affects:
+Memory Capsule categorization
+Legacy Wall structure
+Prompt personalization
+Highlight Reel editing
+AI suggestions
+It creates a 3D representation of a human life.
+
+
+4. The Wall–Vault Duality (Public Meaning vs Private Truth)
+This is a strong conceptual differentiator.
+**Legacy Wall = Celebrated, shared, proud moments
+Legacy Vault = Protected, conditional, deeply private truths**
+No social app or genealogy or journaling system offers this dual-mode structure.
+It mirrors how real people live:
+Some things belong on the “wall”
+Some things belong in the “vault”
+This duality will instantly signal:  “Ah — this is not social media.”
+
+
+
+5. Memory Capsules as the Atomic Unit
+Not posts. Not photos. Not notes. Not media dumps.
+Capsules represent:
+a moment
+a feeling
+a lesson
+a story
+an intent
+a voice note
+a reflection
+Everything in the system builds from this one unified object.
+This makes the platform:
+easier to design
+easier to scale
+emotionally consistent
+semantically powerful for AI
+Capsules give you a “product language” that nobody else has.
+
+
+6. AI as a Gentle, Reflective Story Guide
+	(AI capability will be assessed based on effort required)
+AI is not a content generator.
+It is:
+a prompt engine
+a meaning extractor
+a story weaver
+a curator of threads
+a reflection amplifier
+This AI philosophy is rare and immediately differentiating.
+Examples of AI nudges:
+“Why was this moment meaningful to you?”
+“Did this event strengthen any of your values?”
+“Would you like to add a lesson for your future family?”
+“I spotted a milestone — should this go on your Legacy Wall?”
+“You uploaded 30 photos from 1998 — want help creating a Memory Capsule?”
+AI becomes part of the emotional UX, not a gimmick.
+
+7. Collaborative, Multi-Voice Memories (Relationship Echoes)
+A memory becomes a shared story:
+Others can add:
+their angle
+their feelings
+their photos
+their lessons
+their memory of you from that moment
+This creates a tapestry of perspectives.
+This is rare and deeply human.
+
+
+8. Private Family Network (Not Public, Not Social Media)
+No likes. No followers. No broadcasting. No algorithm chasing.
+Everything is:
+private-by-default
+invite-only
+family-rooted
+consent-driven
+This builds trust, which is a differentiator in itself.
+
+
+
+9. Emotion-First Navigation (Not Feed-Driven)
+The system nudges users to explore:
+their timeline
+their values
+their ancestry
+their life lessons
+their roles
+their relationships
+This is cognitively opposite from feed-based platforms.
+The experience feels like exploring:
+a scrapbook
+a museum
+a personal documentary
+This is entirely different from scrolling.
+
+10. Connection to the Past, Present, and Future
+The MVP subtly supports all three temporal dimensions:
+Past: ancestry, values, lineage
+Present: stories, achievements, reflections
+Future: vault items, messages, instructions, wisdom
+This temporal wholeness makes the product feel like a family legacy ecosystem, not a single-purpose tool.
+
+
+11. Emotional Tone & Voice (Brand Differentiator)
+Your product speaks with:
+dignity
+warmth
+reflection
+humanity
+The tone is part of your differentiation.
+Even without Section 8 (UX/UI Principles), the underlying emotional voice is already defined here: Calming, meaningful, not performative.
+
+
+12. Identity, Memory & Continuity
+Combining:
+personas
+capsules
+wall + vault
+timeline
+family tree
+…creates a uniqueness no existing category has attempted.
+You’re not competing with genealogy or social media.
+You're redefining digital legacy.
+
+
+ 1.6 Out of Scope (For MVP)
+The following are not included in the MVP, but may be added later: 
+AI-generated summaries or auto-detection 
+Public sharing 
+Complex genealogy tools 
+Recommendation algorithms 
+Advanced analytics
+TBD 
+Social media imports (Facebook/LinkedIn) 
+
+1.7 Terminology
+To standardize language used across design/dev: 
+Memory Capsule — A structured memory entry containing story, media, emotions. 
+Legacy Wall — Public-facing (family-circle) achievements and milestones. - 
+Legacy Vault — Private, encrypted item storage. 
+Timeline — Chronological life story view. 
+Personas — Six-dimension identity model. 
+Family Feed — Private updates. 
+Family Tree — Relationship mapping. 
+Life Tapestry — 360° identity visualization (included in MVP). 
+Cultural Heritage / Tradition Tracker — Cultural rituals, traditions, customs (included in MVP).
+
+1.8 Success Criteria for MVP
+The MVP is considered successful if: 
+Users can create accounts, build profiles, and add memories.
+Users can build a family tree and invite others. 
+Users can create memory capsules and view them on a timeline. 
+Users can create wall items and vault items. 
+Users can view a simple Life Tapestry visualization. 
+Users can add cultural traditions. 
+The experience is intuitive, warm, calm, and private. 
+The system is stable and secure.
+
+1.9 Target Audience
+Adults ages 25–50 building digital legacies.
+Older family members ages 50–80 familiar with basic digital interactions.
+Younger adults (Gen Z) exploring family history.
+
+1.10 Platforms (MVP)
+Responsive Web App (desktop-first, mobile-friendly)
+Mobile apps (iOS/Android) are out of scope for MVP.
+
+1.11 Summary
+The MVP establishes the core user journey: - Join → Build Profile → Add Memories → Map Family → Create Wall/Vault → Reflect
+This creates a strong base for future layers like AI, automation, social imports, and advanced storytelling tools.
+2. Core Features and Functional Requirements
+This section outlines all must-have MVP features, structured for clear developer understanding. Each feature includes a description, functional needs, and user interactions.
+
+2.1 User Accounts & Authentication
+Description
+Users must be able to create accounts and securely log into the platform.
+Functional Requirements
+2.1.1 Email-based sign-up and login
+2.1.2 Password creation + reset flow
+2.1.3 Multi-factor authentication (optional for MVP but recommended)
+2.1.4 Basic profile creation upon signup
+2.1.5 Automatic session handling (remember me, logout)
+
+2.2 User Profile (with Six-Persona Identity Model)
+Description
+Each user will have a personal profile that reflects their identity across six personas.
+Profiles are the “identity containers” for each user. Personas are the framework that gives the profile depth and structure.
+Profile Contents
+Name
+Photo
+Birth year
+Short bio
+Personas with brief descriptions
+Link to Timeline
+Link to Legacy Wall
+Link to Vault (if user is owner)
+Personas
+Six identity categories:
+Personal
+Professional
+Social
+Generational
+Spiritual
+Cultural
+Personas allow users to filter memories through different lenses.
+User Actions
+Edit profile
+Update persona descriptions
+Explore persona-specific memories (filters)
+AI Assistance
+AI can:
+Suggest persona associations
+Help refine persona descriptions
+Detect which persona a Capsule aligns with
+Provide persona-based prompts (“Tell us something from your Cultural roots.”)
+
+Summary
+These six primitives form the entire functional backbone of the MVP. Everything else — feed, AI prompts, highlight reel, notifications — builds on top of these.
+If you're happy with this structure, we’ll proceed to:
+
+  Functional Requirements
+2.2.1 Profile photo, cover photo
+2.2.2 Basic info (name, birth year, location, short bio)
+2.2.3 Persona highlights (free text fields + optional media)
+2.2.4 Ability to edit profile anytime
+2.2.5 Visibility controls for each section
+
+   
+    Profiles act as the anchor for:
+timelines
+wall entries
+capsule categorization
+family tree nodes
+This is the “identity layer” required for your 3D legacy model.
+
+
+2.3 Memory Capsules
+Description
+The core storytelling unit. Users can create capsules that capture moments, reflections, lessons, media, and emotions.
+Functional Requirements
+2.3.1 Create new memory capsule
+2.3.2 Components of a capsule:
+Title (required)
+Story / Description (text or voice-to-text)
+Media (photo, video, audio, document)
+Date / Timeframe (year or exact date)
+Persona Tags (Personal, Professional, Social, Generational, Spiritual, Cultural)
+Emotional Tags (pride, resilience, love, joy, grief, sacrifice, etc.)
+Lesson or Insight (optional)
+People Involved (linked profiles)
+Visibility Setting
+Family
+Self
+Contributors only
+Add to Legacy Wall? (checkbox)
+Reflections from Others (optional; family members can add their version of the memory)
+User Actions
+Create a Capsule
+Edit Capsule
+Add media
+Add reflection
+Mark as Wall-worthy
+Move to Vault (if sensitive)
+Tag personas
+Tag family members
+2.3.3 Edit/delete capsule
+2.3.4 Permissions (who can see it)
+2.3.5 Capsules displayed in timeline + feed
+
+    Capsules power everything else:
+Timeline
+Legacy Wall
+Highlight Reel
+Family Feed
+
+    AI or Automation involvement:
+prompts users (“Why did this matter?”)
+helps summarize
+extracts themes
+tag suggestions
+
+
+2.4 Timeline
+Description
+A chronological view of a user’s life moments through their Memory Capsules.
+To let users visually explore their life story as a sequence of meaningful moments.
+This is the “backbone” of the legacy.
+Structure
+Horizontal or vertical timeline
+Year markers
+Capsules displayed in order
+Filters:
+Persona
+Media type
+Emotional tag
+User Actions
+Scroll through life
+Add Capsule at specific year
+Edit Capsule
+Filter Capsules
+AI Assistance
+AI can:
+Identify gaps (e.g., “You haven’t added anything from your early 20s”)
+Suggest milestones from photos
+Generate year summaries (“Your 1998 in 3 sentences")
+
+Functional Requirements
+2.4.1 View capsules by year/month
+2.4.2 Scrollable vertical timeline
+2.4.3 Filter by persona or tag
+2.4.4 Clicking opens full capsule
+2.5 Legacy Wall
+Description
+A curated, celebratory wall of achievements, milestones, awards, and life lessons.
+A curated space that displays:
+accomplishments
+meaningful moments
+lessons
+wisdom
+life milestones
+Users can choose which Capsules appear on the Wall. AI can gently suggest wall-worthy items (“This feels like a legacy moment — add to your Wall?”).
+Wall entries reinforce the product’s legacy-over-lifetime value.
+Functional Requirements
+2.5.1 Add new Wall item
+2.5.2 Wall item structure:
+Title
+Category (Personal, Professional, Social, Generational, Spiritual, Cultural)
+Description
+Optional lesson learned
+Media
+2.5.3 Edit/delete items
+2.5.4 View Wall as gallery/grid
+2.5.5 Visibility controlled per item (family only)
+
+
+2.6 Legacy Vault (Private & Secure)
+Description
+A private, encrypted space for personal letters, digital keys, instructions, and sensitive family information. Basic MVP functionality:
+create secure vault entries
+store: letters, notes, secrets, small files, instructions
+simple permissions (select people who can access, or “only after my passing”)
+encryption messaging (even if technically simple at MVP)
+Functional Requirements
+2.6.1 Vault access screen requiring additional verification (e.g., passcode)
+2.6.2 Add Vault item
+2.6.3 Item structure:
+Title
+Type (letter, key, instruction, document)
+Description
+File upload
+2.6.4 Strict visibility (owner only unless otherwise designated)
+2.6.5 Multi-layer lock optional
+
+
+2.7 Family Feed (Private)
+Description
+A private feed showing updates from family members only. A private, non-algorithmic feed showing:
+new memory capsules
+wall additions
+reflections added by family
+new connections in the tree
+No likes.
+No follower counts.
+Just a warm family update space.
+Feed ensures ongoing engagement.
+Functional Requirements
+2.7.1 Show new capsules, wall additions, profile updates
+2.7.2 Ability to comment/react (emoji set)
+2.7.3 Filter by user or type of update
+
+
+
+2.8 Family Tree
+Description
+Purpose
+To give users a simple way to map relationships and understand context.
+MVP Structure
+Add person
+Set relationship (parent, child, sibling)
+Upload photo
+Invite via email
+User Actions
+Add family member
+Edit profile
+Move or correct relationship
+View tree (simple graph view)
+AI Assistance
+At MVP level:
+Suggest likely relationships when names match
+Offer optional prompts like: “Tell a memory about your grandfather?”
+AI guidance mainly happens through story prompts, not tree automation.
+
+Functional Requirements
+2.8.1 Add family members (name + relationship)
+2.8.2 Invite family members via email
+2.8.3 Edit relationships
+2.8.4 View tree as simple diagram (parents/children)
+
+2.9 Cultural Heritage / Tradition Tracker (Included in MVP)
+Description
+A space to capture rituals, traditions, customs, recipes, celebrations.
+Functional Requirements
+2.9.1 Add tradition entry
+2.9.2 Entry structure:
+Name of tradition
+Cultural origin
+Description/story
+Media
+2.9.3 Traditions shown in gallery view
+2.9.4 Ability to tag family members
+
+
+2.10 Life Tapestry (360° Identity View)
+Description
+A consolidated, immersive view that visually connects a user’s personas, traditions, memories, and wall items.
+Functional Requirements
+2.10.1 Simple visualization for MVP (e.g., wheel or map)
+2.10.2 Pulls data from:
+Personas
+Memory capsules
+Wall items
+Traditions
+2.10.3 Interactive: clicking opens underlying item
+
+
+2.11 Roles & Permissions
+Functional Requirements
+2.11.1 User roles:
+Viewer (read-only)
+Contributor (edit own content)
+Legacy Keeper (can edit assigned users)
+2.11.2 Per-item visibility (Me, Selected Family, All Family)
+2.11.3 Vault items always private by default
+
+
+2.12 Invitations & Collaboration
+Functional Requirements
+2.12.1 Invite family members via link/email
+2.12.2 Accept/decline invite flow
+2.12.3 Collaborate on shared memories (add perspective)
+2.12.4 View contributor list per capsule
+
+2.13 Notifications (Basic)
+Functional Requirements
+2.13.1 When someone adds a capsule
+2.13.2 When someone comments/reacts
+2.13.3 Reminders to complete profile or add memory
+
+2.14 Search & Filtering
+Functional Requirements
+2.14.1 Search by name, tag, place
+2.14.2 Filter timelines/walls by persona or category
+
+2.15 System & Stability Requirements
+2.15.1 Secure data storage
+2.15.2 Basic encryption for Vault items
+2.15.3 Responsive design
+2.15.4 Error handling and fallback screens
+
+3. User Experience (UX) Principles & Design Guidelines
+3.1 UX Philosophy
+The platform must feel: - Warm - Reflective - Intimate - Calm - Safe - Family-first
+No screen should feel overwhelming, sterile, or transactional.
+
+3.2 Tone & Emotional Intent
+The product should:
+Invite reflection
+Guide gently
+Avoid pressure or guilt
+Celebrate without performing
+Encourage connection without being social-media-driven
+The tone is:
+Empathetic
+Gentle
+Supportive
+Respectful
+Non-invasive
+
+3.3 Experience Pillars
+Clarity – Every action is easy and understandable.
+Meaning – Every feature reinforces purpose.
+Privacy – Always safe, always intentional.
+Presence – Focus on real human stories.
+Simplicity – No noise, no clutter.
+
+3.4 Accessibility
+Large tap targets
+High-contrast text
+Easy navigation for seniors
+Voice-friendly fields (optional later)
+
+3.5 Microcopy Guidelines
+Microcopy must: - Encourage storytelling - Ask reflective questions - Be short, warm, and supportive
+Examples: - “What made this moment meaningful?” - “Who were you becoming during this time?” - “Add a memory for your family to cherish.” - “Capture this before it fades.”
+
+4. Predefined Prompts Library (No AI in MVP)
+4.1 Purpose: Because the MVP excludes AI-driven prompting, all screens will use a fixed library of prompts to support reflection.
+
+4.2 Capsule Creation Prompts
+“Why did this moment matter to you?”
+“What did you learn from this experience?”
+“Who shared this moment with you?”
+“What emotions did you feel?”
+“How did this event shape who you are today?”
+
+4.3 Legacy Wall Prompts
+“What achievement are you most proud of?”
+“What challenge did you overcome here?”
+“What lesson did this milestone teach you?”
+“Who supported you on this journey?”
+
+4.4 Vault Item Prompts
+“Write a letter for someone to read one day.”
+“Add instructions that matter.”
+“Store a private message or document safely.”
+“Add something only the right person should see.”
+
+4.5 Tradition Tracker Prompts
+“Describe the ritual or tradition.”
+“Where does it come from?”
+“What does it mean to your family?”
+“Who taught it to you?”
+
+4.6 Profile Prompts
+“What defines you across your personal life?”
+“What drives you professionally?”
+“What social connections matter most to you?”
+“What traditions or values have you inherited from your family?”
+
+5. Information Architecture (IA)
+·  Home - YES
+·  Profile - Yes
+·  Timeline - YES
+·  Memory Capsule View - Yes
+·  Legacy Wall - YES
+·  Legacy Vault - Yes
+·  Family Feed - YES
+·  Family Tree - Yes
+·  Family Member Profile - Yes
+·  Settings - YES
+·  Onboarding screens
+·  Create Capsule - YES
+·  Create Wall Item - Yes
+·  Create Vault Item - YES
+·  Notifications 
+·  Search
+·  Invite Family - YES
+·  Role Management
+·  AI Modals
+
+5.1 Global Navigation
+Home
+Profile
+Timeline
+Wall
+Vault
+Feed
+Family Tree
+Traditions
+Settings
+
+5.2 Content Structure
+User →
+Profile
+Personas
+Timeline
+Wall
+Vault
+Traditions
+Family Tree
+
+5.3 Cross-Linking Rules
+Capsules appear in timeline + feed
+Wall items link to related capsules (optional)
+Tapestry pulls from all content
+Family tree connects to profiles
+
+6. Data Model (High-Level)
+6.1 User
+user_id
+name
+email
+profile_photo
+cover_photo
+personas (6 fields)
+bio
+settings
+
+6.2 Memory Capsule
+capsule_id
+user_id
+title
+description
+media
+emotions
+date
+visibility
+tags
+
+6.3 Wall Item
+wall_id
+user_id
+category
+title
+description
+lesson
+media
+visibility
+
+6.4 Vault Item
+vault_id
+user_id
+type
+title
+description
+file
+access_rules
+
+6.5 Tradition
+tradition_id
+user_id
+name
+origin
+description
+media
+
+6.6 Family Member
+member_id
+relationship
+linked_user_id
+invitation_status
+
+6.7 Tapestry Object
+(Generated dynamically; no special table)
+7. Security & Privacy Requirements
+7.1 Core Privacy Principles
+Private by default
+User controls visibility
+Vault always double-protected
+
+7.2 Authentication
+Secure password hashing
+Optional MFA
+Expiring sessions
+
+7.3 Authorization
+Role-based access
+Per-item visibility rules
+Family-only sharing
+
+7.4 Vault Encryption
+Client-side encryption optional for MVP
+Server-level encryption required
+
+7.5 Data Retention
+Soft delete for 30 days
+Permanent delete thereafter
+
+8. Notifications & Engagement Hooks
+8.1 Notification Types
+New capsule from family
+New wall item
+Comment/react
+Profile completion reminder
+Weekly prompt
+
+8.2 Engagement Hooks
+Milestone alerts (“10 capsules added!”)
+Memory anniversaries
+Tradition reminders (“It’s Diwali next week—capture your rituals?”)
+
+9. Non-Functional Requirements
+9.1 Performance
+Pages load under 2 seconds
+Smooth navigation
+
+9.2 Scalability
+Support thousands of users
+Modular backend
+
+9.3 Reliability
+99% uptime target
+Graceful error handling
+
+9.4 Security Compliance
+GDPR-aligned practices
+Basic audit logs
+10. Admin & Settings
+10.1 User Settings
+Change password
+Notification control
+Privacy defaults
+
+10.2 Admin (MVP Light)
+Simple user management for your test environment
+
