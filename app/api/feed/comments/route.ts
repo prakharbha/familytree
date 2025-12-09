@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
             ownerId = t?.profileId
         }
 
-        if (ownerId && ownerId !== profile.id) {
+        if (ownerId && ownerId !== profile!.id) {
             const { createTargetedNotification } = await import('@/lib/notifications')
             await createTargetedNotification(ownerId, 'COMMENT', notificationTitle, notificationMessage, link)
         }
