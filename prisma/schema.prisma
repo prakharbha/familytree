@@ -39,6 +39,8 @@ enum NotificationType {
   FAMILY_UPDATE
   CONNECTION_REQUEST
   CHAT_MESSAGE
+  REACTION
+  COMMENT
 }
 
 enum PersonaType {

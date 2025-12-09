@@ -5,9 +5,11 @@ import { FeedItem } from '@/components/feed/feed-item'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Loader2, Edit } from 'lucide-react'
+import { Loader2, Edit, Clock, BookHeart, Award } from 'lucide-react'
 import { FeedSidebar } from '@/components/feed/feed-sidebar'
+import { QuickCreateWidget } from '@/components/feed/quick-create-widget'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Skeleton } from '@/components/ui/skeleton'
 import Link from 'next/link'
 
@@ -15,8 +17,7 @@ export default function FeedPage() {
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [newPost, setNewPost] = useState('')
-  const [posting, setPosting] = useState(false)
+
 
   const [currentUserId, setCurrentUserId] = useState<string>('')
   const [userProfile, setUserProfile] = useState<any>(null)
@@ -54,26 +55,6 @@ export default function FeedPage() {
     fetchMe()
     fetchFeed()
   }, [])
-
-  const handlePost = async () => {
-    if (!newPost.trim()) return
-    setPosting(true)
-    try {
-      const response = await fetch('/api/feed', {
-        method: 'POST',
-        body: JSON.stringify({ content: newPost }),
-        headers: { 'Content-Type': 'application/json' }
-      })
-      if (response.ok) {
-        setNewPost('')
-        fetchFeed() // Refresh
-      }
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setPosting(false)
-    }
-  }
 
   return (
     <div className="min-h-screen bg-stone-50/30 py-8 px-4 sm:px-6 lg:px-8">
@@ -120,22 +101,8 @@ export default function FeedPage() {
           {/* Main Feed Column */}
           <div className="lg:col-span-8 space-y-6">
             {/* Create Post Widget */}
-            <Card>
-              <CardContent className="pt-4">
-                <Textarea
-                  placeholder="Share a thought or update with the family..."
-                  className="mb-4 resize-none border-stone-200"
-                  value={newPost}
-                  onChange={e => setNewPost(e.target.value)}
-                />
-                <div className="flex justify-end">
-                  <Button onClick={handlePost} disabled={posting || !newPost.trim()}>
-                    {posting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Post Update
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Create Post Widget with Quick Actions */}
+            <QuickCreateWidget onPostSuccess={fetchFeed} />
 
             {/* Feed List */}
             <div className="space-y-6">

@@ -56,11 +56,36 @@ export async function POST(request: NextRequest) {
                 })
                 return NextResponse.json(updated)
             }
-        } else {
             // Create
             const reaction = await prisma.feedReaction.create({
                 data: createData
             })
+
+            // Notify Owner
+            const notificationTitle = `${profile.name} liked your post`
+            const notificationMessage = `reacted with ${type}`
+            const link = '/feed'
+
+            let ownerId = null;
+            if (entityType === 'POST') {
+                const p = await prisma.feedPost.findUnique({ where: { id: entityId }, select: { profileId: true } })
+                ownerId = p?.profileId
+            } else if (entityType === 'CAPSULE') {
+                const m = await prisma.memoryCapsule.findUnique({ where: { id: entityId }, select: { profileId: true } })
+                ownerId = m?.profileId
+            } else if (entityType === 'WALL') {
+                const w = await prisma.legacyWallItem.findUnique({ where: { id: entityId }, select: { profileId: true } })
+                ownerId = w?.profileId
+            } else if (entityType === 'TRADITION') {
+                const t = await prisma.tradition.findUnique({ where: { id: entityId }, select: { profileId: true } })
+                ownerId = t?.profileId
+            }
+
+            if (ownerId && ownerId !== profile.id) {
+                const { createTargetedNotification } = await import('@/lib/notifications')
+                await createTargetedNotification(ownerId, 'REACTION', notificationTitle, notificationMessage, link)
+            }
+
             return NextResponse.json(reaction)
         }
 

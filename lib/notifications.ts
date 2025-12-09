@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma/client'
 
 export async function createNotification(
-    type: 'MEMORY_CAPSULE' | 'WALL_ITEM' | 'FAMILY_UPDATE' | 'CONNECTION_REQUEST' | 'CHAT_MESSAGE',
+    type: 'MEMORY_CAPSULE' | 'WALL_ITEM' | 'FAMILY_UPDATE' | 'CONNECTION_REQUEST' | 'CHAT_MESSAGE' | 'REACTION' | 'COMMENT',
     title: string,
     message: string,
     link: string | null,
@@ -32,5 +32,28 @@ export async function createNotification(
         console.log(`Created ${profiles.length} notifications for ${type}`)
     } catch (error) {
         console.error('Failed to create notifications', error)
+    }
+}
+
+export async function createTargetedNotification(
+    targetProfileId: string,
+    type: 'MEMORY_CAPSULE' | 'WALL_ITEM' | 'FAMILY_UPDATE' | 'CONNECTION_REQUEST' | 'CHAT_MESSAGE' | 'REACTION' | 'COMMENT',
+    title: string,
+    message: string,
+    link: string | null
+) {
+    try {
+        await prisma.notification.create({
+            data: {
+                profileId: targetProfileId,
+                type,
+                title,
+                message,
+                link
+            }
+        })
+        console.log(`Created targeted notification for ${targetProfileId}`)
+    } catch (error) {
+        console.error('Failed to create targeted notification', error)
     }
 }

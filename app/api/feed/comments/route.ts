@@ -39,6 +39,31 @@ export async function POST(request: NextRequest) {
             include: { profile: true }
         })
 
+        // Notify Entity Owner
+        const notificationTitle = `New Comment from ${profile.name}`
+        const notificationMessage = `commented: "${content.substring(0, 30)}${content.length > 30 ? '...' : ''}"`
+        const link = '/feed' // Simplification for now, ideal would be to anchor to item
+
+        let ownerId = null;
+        if (entityType === 'POST') {
+            const p = await prisma.feedPost.findUnique({ where: { id: entityId }, select: { profileId: true } })
+            ownerId = p?.profileId
+        } else if (entityType === 'CAPSULE') {
+            const m = await prisma.memoryCapsule.findUnique({ where: { id: entityId }, select: { profileId: true } })
+            ownerId = m?.profileId
+        } else if (entityType === 'WALL') {
+            const w = await prisma.legacyWallItem.findUnique({ where: { id: entityId }, select: { profileId: true } })
+            ownerId = w?.profileId
+        } else if (entityType === 'TRADITION') {
+            const t = await prisma.tradition.findUnique({ where: { id: entityId }, select: { profileId: true } })
+            ownerId = t?.profileId
+        }
+
+        if (ownerId && ownerId !== profile.id) {
+            const { createTargetedNotification } = await import('@/lib/notifications')
+            await createTargetedNotification(ownerId, 'COMMENT', notificationTitle, notificationMessage, link)
+        }
+
         return NextResponse.json(comment)
 
     } catch (error: any) {
