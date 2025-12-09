@@ -15,11 +15,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
         }
 
-        const { entityId, entityType, type } = body; // entityType: 'POST', 'CAPSULE', 'WALL', 'TRADITION'
-        // type: 'heart', etc.
+        const { entityId, entityType, type } = body;
 
         // Construct unique filter based on type
-        // This is generic handling
         let whereClause: any = { profileId: profile.id }
         let createData: any = { profileId: profile.id, type }
 
@@ -57,6 +55,7 @@ export async function POST(request: NextRequest) {
                 })
                 return NextResponse.json(updated)
             }
+        } else {
             // Create
             const reaction = await prisma.feedReaction.create({
                 data: createData
