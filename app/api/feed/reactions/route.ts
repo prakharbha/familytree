@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/auth/middleware'
 import { prisma } from '@/lib/prisma/client'
+import { createTargetedNotification } from '@/lib/notifications'
 
 export async function POST(request: NextRequest) {
     try {
@@ -82,8 +83,11 @@ export async function POST(request: NextRequest) {
             }
 
             if (ownerId && ownerId !== profile!.id) {
-                const { createTargetedNotification } = await import('@/lib/notifications')
-                await createTargetedNotification(ownerId, 'REACTION', notificationTitle, notificationMessage, link)
+                try {
+                    await createTargetedNotification(ownerId, 'REACTION', notificationTitle, notificationMessage, link)
+                } catch (notifyError) {
+                    console.error('Notification failed (non-blocking):', notifyError)
+                }
             }
 
             return NextResponse.json(reaction)
