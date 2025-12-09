@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
             })
 
             // Notify Owner
-            const notificationTitle = `${profile.name} liked your post`
+            const notificationTitle = `${profile!.name} liked your post`
             const notificationMessage = `reacted with ${type}`
             const link = '/feed'
 

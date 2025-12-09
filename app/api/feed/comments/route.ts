@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         })
 
         // Notify Entity Owner
-        const notificationTitle = `New Comment from ${profile.name}`
+        const notificationTitle = `New Comment from ${profile!.name}`
         const notificationMessage = `commented: "${content.substring(0, 30)}${content.length > 30 ? '...' : ''}"`
         const link = '/feed' // Simplification for now, ideal would be to anchor to item
 
